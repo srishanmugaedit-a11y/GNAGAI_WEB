@@ -95,12 +95,14 @@ export async function compressImage(file, maxDimension = 2048, quality = 0.85) {
         reader.onerror = (error) => reject(error);
     });
 }
-export function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0)
-        return '0 Bytes';
+export function formatBytes(bytes, decimals = 1) {
+    if (!bytes || isNaN(Number(bytes)) || Number(bytes) <= 0)
+        return '0 KB';
+    const num = Number(bytes);
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    const i = Math.min(Math.max(0, Math.floor(Math.log(num) / Math.log(k))), sizes.length - 1);
+    return parseFloat((num / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+

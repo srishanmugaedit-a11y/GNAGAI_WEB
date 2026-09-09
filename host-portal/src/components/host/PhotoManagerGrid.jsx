@@ -3,18 +3,25 @@ import React, { useState } from 'react';
 import { Trash2, Star, Download, Heart, CheckSquare, Square, Image as ImageIcon } from 'lucide-react';
 import { formatBytes } from '@/lib/imageCompressor';
 import { deleteEventPhoto, updateEvent } from '@/lib/storageService';
-export default function PhotoManagerGrid({ eventId, currentCoverUrl, photos, onPhotosChange, onCoverChange, }) {
+export default function PhotoManagerGrid({ eventId, currentCoverUrl, photos = [], onPhotosChange, onCoverChange }) {
     const [filter, setFilter] = useState('all');
     const [selectedIds, setSelectedIds] = useState([]);
     const [previewPhoto, setPreviewPhoto] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    const filteredPhotos = photos.filter((p) => {
+
+    const safePhotos = Array.isArray(photos) ? photos.filter(Boolean) : [];
+
+    const filteredPhotos = safePhotos.filter((p) => {
         if (filter === 'host')
             return p.uploader_role === 'host';
         if (filter === 'guest')
             return p.uploader_role === 'guest';
         return true;
     });
+
+    const hostCount = safePhotos.filter((p) => p.uploader_role === 'host').length;
+    const guestCount = safePhotos.filter((p) => p.uploader_role === 'guest').length;
+
     const toggleSelect = (id) => {
         setSelectedIds((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
     };
@@ -33,11 +40,13 @@ export default function PhotoManagerGrid({ eventId, currentCoverUrl, photos, onP
             return;
         setIsDeleting(true);
         for (const id of selectedIds) {
-            const p = photos.find((x) => x.id === id);
+            const p = safePhotos.find((x) => x && x.id === id);
             await deleteEventPhoto(id, p?.storage_path);
         }
-        const remaining = photos.filter((p) => !selectedIds.includes(p.id));
-        onPhotosChange(remaining);
+        const remaining = safePhotos.filter((p) => p && !selectedIds.includes(p.id));
+        if (onPhotosChange) {
+            onPhotosChange(remaining);
+        }
         setSelectedIds([]);
         setIsDeleting(false);
     };
@@ -54,17 +63,17 @@ export default function PhotoManagerGrid({ eventId, currentCoverUrl, photos, onP
           <button onClick={() => setFilter('all')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filter === 'all'
             ? 'bg-gold-500 text-stone-950 font-semibold shadow'
             : 'text-stone-400 hover:text-stone-200'}`}>
-            All ({photos.length})
+            All ({safePhotos.length})
           </button>
           <button onClick={() => setFilter('host')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filter === 'host'
             ? 'bg-gold-500 text-stone-950 font-semibold shadow'
             : 'text-stone-400 hover:text-stone-200'}`}>
-            Official ({photos.filter((p) => p.uploader_role === 'host').length})
+            Official ({hostCount})
           </button>
           <button onClick={() => setFilter('guest')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filter === 'guest'
             ? 'bg-gold-500 text-stone-950 font-semibold shadow'
             : 'text-stone-400 hover:text-stone-200'}`}>
-            Guest Snaps ({photos.filter((p) => p.uploader_role === 'guest').length})
+            Guest Snaps ({guestCount})
           </button>
         </div>
 

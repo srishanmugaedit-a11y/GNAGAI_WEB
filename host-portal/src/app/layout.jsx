@@ -1,5 +1,13 @@
 import '@/styles/globals.css';
 import Navbar from '@/components/shared/Navbar';
+export const viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    viewportFit: 'cover',
+    themeColor: '#0c0a09',
+};
+
 export const metadata = {
     title: 'Host Portal | Gangai Studio - Sacred Event Photography',
     description: 'Manage sacred events, bulk upload high-resolution photos, generate table QR codes, and deliver unforgettable memories.',

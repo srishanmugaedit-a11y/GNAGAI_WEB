@@ -1,8 +1,13 @@
 import '@/styles/globals.css';
 import Navbar from '@/components/shared/Navbar';
 export const metadata = {
-    title: 'Host Portal | Gangai Studio - Event & Wedding Photography',
-    description: 'Manage wedding events, bulk upload high-resolution photos, generate table QR codes, and deliver unforgettable memories.',
+    title: 'Host Portal | Gangai Studio - Sacred Event Photography',
+    description: 'Manage sacred events, bulk upload high-resolution photos, generate table QR codes, and deliver unforgettable memories.',
+    icons: {
+      icon: '/icon.svg',
+      shortcut: '/icon.svg',
+      apple: '/icon.svg',
+    },
 };
 export default function RootLayout({ children, }) {
     return (<html lang="en" className="dark">

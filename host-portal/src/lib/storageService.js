@@ -354,13 +354,10 @@ export async function uploadEventPhoto(eventId, eventSlug, file, uploaderRole = 
                 thumbnail_url: cdnUrl.includes('cloudinary.com')
                     ? cdnUrl.replace('/upload/', '/upload/w_600,c_scale,q_auto,f_auto/')
                     : cdnUrl,
-                original_filename: file.name,
                 caption: caption || 'Sacred Darshan',
                 width,
                 height,
                 file_size_bytes: finalSize,
-                mime_type: file.type || 'image/jpeg',
-                is_approved: true,
                 is_featured: false,
                 uploader_role: uploaderRole,
                 uploader_name: uploaderName,

@@ -10,79 +10,30 @@ export default function BulkUploader({ eventId, eventSlug, onUploadComplete }) {
     const [isDragging, setIsDragging] = useState(false);
     const [isUploadingAll, setIsUploadingAll] = useState(false);
     const fileInputRef = useRef(null);
-    const handleFiles = useCallback((files) => {
-        const fileArray = Array.from(files).filter((file) => file.type.startsWith('image/') || file.name.match(/\.(jpg|jpeg|png|webp|heic)$/i));
-        if (fileArray.length === 0) return;
-
-        const newItems = fileArray.map((file) => ({
-            id: 'up_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36),
-            file,
-            previewUrl: URL.createObjectURL(file),
-            originalSize: file.size,
-            progress: 0,
-            status: 'queued',
-        }));
-
-        setQueue((prev) => [...prev, ...newItems]);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    }, []);
-
-    // Auto-trigger queue processing when new queued items arrive
-    useEffect(() => {
-        const hasPending = queue.some((q) => q.status === 'queued');
-        if (hasPending && !isUploadingAll) {
-            processUploadQueue();
-        }
-    }, [queue, isUploadingAll]);
-
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-    const handleDragLeave = (e) => {
-        e.preventDefault();
-        setIsDragging(false);
-    };
-    const handleDrop = (e) => {
-        e.preventDefault();
-        setIsDragging(false);
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            handleFiles(e.dataTransfer.files);
-        }
-    };
-    const removeQueueItem = (id) => {
-        setQueue((prev) => prev.filter((item) => item.id !== id));
-    };
-    const updateCaption = (id, caption) => {
-        setQueue((prev) => prev.map((item) => (item.id === id ? { ...item, caption } : item)));
-    };
-    const processUploadQueue = async () => {
-        if (isUploadingAll) return;
+    const startUploadBatch = useCallback(async (items) => {
+        if (!items || items.length === 0) return;
         setIsUploadingAll(true);
         const uploadedPhotos = [];
 
-        for (let i = 0; i < queue.length; i++) {
-            const item = queue[i];
-            if (item.status === 'completed') continue;
-
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
             try {
                 setQueue((prev) => prev.map((q) => q.id === item.id ? { ...q, status: 'compressing', progress: 30 } : q));
-                await new Promise((r) => setTimeout(r, 50));
+                await new Promise((r) => setTimeout(r, 40));
                 setQueue((prev) => prev.map((q) => q.id === item.id ? { ...q, status: 'uploading', progress: 65 } : q));
 
                 const photo = await uploadEventPhoto(eventId, eventSlug, item.file, 'host', uploaderName || 'Gangai Studio', item.caption || 'Sacred Darshan');
-                uploadedPhotos.push(photo);
-
-                setQueue((prev) => prev.map((q) => q.id === item.id
-                    ? {
-                        ...q,
-                        status: 'completed',
-                        progress: 100,
-                        compressedSize: photo.file_size_bytes,
-                    }
-                    : q));
+                if (photo) {
+                    uploadedPhotos.push(photo);
+                    setQueue((prev) => prev.map((q) => q.id === item.id
+                        ? {
+                            ...q,
+                            status: 'completed',
+                            progress: 100,
+                            compressedSize: photo.file_size_bytes,
+                        }
+                        : q));
+                }
             }
             catch (err) {
                 console.error('Upload failed for item:', item.file.name, err);
@@ -112,6 +63,52 @@ export default function BulkUploader({ eventId, eventSlug, onUploadComplete }) {
                 onUploadComplete(uploadedPhotos);
             }
         }
+    }, [eventId, eventSlug, uploaderName, onUploadComplete]);
+
+    const handleFiles = useCallback((files) => {
+        const fileArray = Array.from(files).filter((file) => file.type.startsWith('image/') || file.name.match(/\.(jpg|jpeg|png|webp|heic)$/i));
+        if (fileArray.length === 0) return;
+
+        const newItems = fileArray.map((file) => ({
+            id: 'up_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36),
+            file,
+            previewUrl: URL.createObjectURL(file),
+            originalSize: file.size,
+            progress: 0,
+            status: 'queued',
+        }));
+
+        setQueue((prev) => [...prev, ...newItems]);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+
+        startUploadBatch(newItems);
+    }, [startUploadBatch]);
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleFiles(e.dataTransfer.files);
+        }
+    };
+    const removeQueueItem = (id) => {
+        setQueue((prev) => prev.filter((item) => item.id !== id));
+    };
+    const updateCaption = (id, caption) => {
+        setQueue((prev) => prev.map((item) => (item.id === id ? { ...item, caption } : item)));
+    };
+    const retryUpload = (item) => {
+        startUploadBatch([item]);
     };
     const completedCount = queue.filter((q) => q.status === 'completed').length;
     const totalOriginalSize = queue.reduce((acc, q) => acc + q.originalSize, 0);

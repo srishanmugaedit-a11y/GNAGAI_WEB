@@ -1,6 +1,5 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -43,7 +42,7 @@ const config: Config = {
           DEFAULT: "#F4E8D3",
           light: "#FAF4EB",
           dark: "#D8C2A0",
-        }
+        },
       },
       fontFamily: {
         serif: ["var(--font-playfair)", "Playfair Display", "Georgia", "serif"],
@@ -78,4 +77,3 @@ const config: Config = {
   },
   plugins: [],
 };
-export default config;

@@ -1,6 +1,5 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -36,7 +35,7 @@ const config: Config = {
           marigold: "#f59e0b",
           kumkum: "#991b1b",
           sandalwood: "#d4a373",
-        }
+        },
       },
       fontFamily: {
         divine: ["var(--font-cinzel)", "Cinzel", "Georgia", "serif"],
@@ -67,4 +66,3 @@ const config: Config = {
   },
   plugins: [],
 };
-export default config;

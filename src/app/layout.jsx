@@ -11,8 +11,13 @@ export const viewport = {
 };
 
 export const metadata = {
-    title: 'Gangai Studio | Sacred Event & Wedding Photo Gallery | கங்கை ஸ்டுடியோ',
-    description: 'View and download high-resolution event and wedding photographs captured by Gangai Studio. கங்கை ஸ்டுடியோவின் உயர்தர புகைப்படங்கள்.',
+    title: 'Gangai Studio | Sacred Event Photo Gallery | கங்கை ஸ்டுடியோ',
+    description: 'View and download high-resolution event photographs captured by Gangai Studio. கங்கை ஸ்டுடியோவின் உயர்தர புகைப்படங்கள்.',
+    icons: {
+      icon: '/icon.svg',
+      shortcut: '/icon.svg',
+      apple: '/icon.svg',
+    },
 };
 
 export default function RootLayout({ children }) {

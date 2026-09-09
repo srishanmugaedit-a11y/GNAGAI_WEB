@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-cinzel: 'Cinzel', serif;
+  --font-cinzel-decorative: 'Cinzel Decorative', serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-playfair: 'Playfair Display', serif;
+  
+  --bg-divine-light: #FCF9F2;
+  --bg-card-light: #FFFFFF;
+  --gold-primary: #D4AF37;
+  --gold-dark: #996515;
+  --kumkum-maroon: #800020;
+  --obsidian: #0D0B09;
+}
+
+/* 100dvh safe container */
+html, body {
+  min-height: 100dvh;
+  background-color: #FCF9F2;
+  color: #2B1B10;
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 100% 30%, rgba(128, 0, 32, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 0% 70%, rgba(212, 175, 55, 0.1) 0%, transparent 55%);
+  background-attachment: fixed;
+}
+
+/* Mobile Safe-Area Utilities */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.pt-safe {
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+
+/* Hide Scrollbar for Horizontal Shelves */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Divine Typography */
+.font-divine {
+  font-family: var(--font-cinzel), serif;
+  letter-spacing: 0.04em;
+}
+
+.font-divine-ornate {
+  font-family: var(--font-cinzel-decorative), serif;
+}
+
+/* Sacred Gold Foil Text Gradients */
+.divine-gold-text {
+  background: linear-gradient(135deg, #8C5E14 0%, #D4AF37 50%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.kumkum-badge {
+  background: linear-gradient(135deg, #800020 0%, #991B1B 100%);
+  color: #FFFFFF;
+}
+
+/* Divine Glassmorphic & Marble Cards */
+.divine-card-light {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 0 10px 30px -5px rgba(140, 94, 20, 0.06), 0 0 15px rgba(212, 175, 55, 0.08);
+}
+
+.divine-card-light:active {
+  transform: scale(0.985);
+}
+
+/* Sacred Diya / Aura Animations */
+@keyframes sacredGlowLight {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.45));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(224, 122, 30, 0.75)) drop-shadow(0 0 35px rgba(212, 175, 55, 0.35));
+    transform: scale(1.06);
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverseSlow {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes divineShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-sacred-glow {
+  animation: sacredGlowLight 3s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 20s linear infinite;
+}
+
+.animate-spin-reverse-slow {
+  animation: spinReverseSlow 25s linear infinite;
+}
+
+.animate-divine-shimmer {
+  background: linear-gradient(90deg, #D4AF37 0%, #FFF3B0 50%, #D4AF37 100%);
+  background-size: 200% 100%;
+  animation: divineShimmer 2s infinite linear;
+}
+
+/* Minimum 44px touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Custom Light Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #FCF9F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5D7BF;
+  border-radius: 9999px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+

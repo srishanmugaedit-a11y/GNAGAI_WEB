@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Next.js build outputs
+.next/
+out/
+build/
+dist/
+
+# Environment Variables & Secrets (CRITICAL: Never commit to GitHub)
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Supabase Secrets & Local DB Files
+.supabase/
+supabase/.temp/
+
+# Debug and System logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# OS & Editor Files
+.DS_Store
+*.pem
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db

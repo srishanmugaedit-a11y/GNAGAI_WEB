@@ -1,0 +1,5 @@
+-- ==============================================================================
+-- GANGAI MOMENTS: CLEAN DATABASE INITIALIZATION
+-- ==============================================================================
+-- This file is kept intentionally blank of demo photos so your production
+-- database starts clean. Use the Host Portal to create your events and upload photos.

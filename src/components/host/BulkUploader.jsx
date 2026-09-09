@@ -107,6 +107,12 @@ export default function BulkUploader({ eventId, eventSlug, onUploadComplete }) {
     const updateCaption = (id, caption) => {
         setQueue((prev) => prev.map((item) => (item.id === id ? { ...item, caption } : item)));
     };
+    const processUploadQueue = () => {
+        const pendingItems = queue.filter((q) => q.status !== 'completed');
+        if (pendingItems.length > 0) {
+            startUploadBatch(pendingItems);
+        }
+    };
     const retryUpload = (item) => {
         startUploadBatch([item]);
     };
